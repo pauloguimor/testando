@@ -190,11 +190,19 @@ function preencher(id,lista,txt){
 }
 
 function abrirPopupPix(){
-  if(!selCargo.value||!selSRE.value){
+  if(!selCargo.value || !selSRE.value){
     alert("Selecione Cargo e SRE");
     return;
   }
-  popupPix.style.display="flex";
+
+  // Se já copiou o Pix alguma vez, não mostra mais o popup
+  if(localStorage.getItem("pix_copiado") === "1"){
+    aplicarFiltro();
+    return;
+  }
+
+  // Caso contrário, mostra o popup normalmente
+  popupPix.style.display = "flex";
 }
 
 function confirmarPopup(){
@@ -246,8 +254,18 @@ function copiarPix(){
   navigator.clipboard.writeText("pauloguimor@yahoo.com.br");
   alert("Chave PIX copiada!");
 }
+
 function copiarPixPopup(){
   navigator.clipboard.writeText("pauloguimor@yahoo.com.br");
+
+  // Marca que o usuário já copiou o Pix
+  localStorage.setItem("pix_copiado", "1");
+
+  // Evento do Analytics (mantém, se quiser)
+  if(typeof gtag === "function"){
+    gtag('event','pix_copiado',{event_category:'doacao'});
+  }
+
   alert("Chave PIX copiada!");
 }
 </script>
